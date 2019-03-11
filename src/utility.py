@@ -1,8 +1,9 @@
-import re, sys
+import sys
 import urllib.request as urllib2
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import logging
+from constants import *
 
 matching_titles = set()
 missing_titles = set()
@@ -76,15 +77,20 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_job_description_links(title_selector):
-    #url =
-    pass
-
-
-'''
-
-page = urllib2.urlopen(url)
+def _get_job_description_links(title_selector, url):
+    page = urllib2.urlopen(url)
     soup = beautiful(page, 'html.parser')
-    links = soup(link_finders[0], link_finders[1])
-    str_links = [str(link) for link in links]
-'''
+    links = soup(title_selector)
+    return [str(link) for link in links]
+
+
+'''   TEMP   '''
+
+
+site_id = 'stackoverflow'
+title_sep = SITES_DICT[site_id]['title_word_sep']
+title = _build_job_title('data science engineer', title_sep)
+
+template = SITES_DICT['stackoverflow']['url_template']
+zipcode = '95054'
+url = _build_site_url(site_id, template, title, zipcode, radius='90', age='60')
