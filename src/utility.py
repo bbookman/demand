@@ -7,21 +7,21 @@ import logging
 matching_titles = set()
 missing_titles = set()
 
-def read_input_file():
+def _read_input_file():
     file = open(sys.argv[2], "r")
     results = file.read()
     file.close()
     return results
 
-def get_zip_code():
-    return = sys.argv[1]
+def _get_zip_code():
+    return sys.argv[1]
 
-def make_date_string():
+def _make_date_string():
     stamp = datetime.now()
     date_string = stamp.strftime('%Y-%d-%m-%H-%M-%S')
     return date_string
 
-def make_time_string():
+def _make_time_string():
     stamp = datetime.now()
     time_string = stamp.strftime('%H:%M')
     return time_string
@@ -46,8 +46,7 @@ def _start_driver():
 
 
 
-
-def _build_site_url(site_id, template, title, zipcode='', radius='60', age='60'):
+def _build_site_url(site_id, template, title, zipcode='', radius='90', age='60'):
     """ Makes an url with each query item inserted into the url template
     site_id: type = str, value of site id like 'indeed' or 'careerbuilder'
     template: type = str, the url template.  example: 'http://indeed.com?{}&afg=&rfr=&title={}'
@@ -76,3 +75,16 @@ def _build_job_title(title, title_separator):
     for word in words:
         result+= word + title_separator
     return result[:-1]
+
+def _get_job_description_links(title_selector):
+    #url =
+    pass
+
+
+'''
+
+page = urllib2.urlopen(url)
+    soup = beautiful(page, 'html.parser')
+    links = soup(link_finders[0], link_finders[1])
+    str_links = [str(link) for link in links]
+'''
