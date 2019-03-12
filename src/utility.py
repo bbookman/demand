@@ -1,4 +1,4 @@
-import sys
+import sys, re
 import urllib.request as urllib2
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
@@ -26,24 +26,6 @@ def _make_time_string():
     stamp = datetime.now()
     time_string = stamp.strftime('%H:%M')
     return time_string
-
-def _start_driver():
-    """ Starts the chrome webdriver in headless mode """
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('window-size=1920x1080')
-    try:
-        driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)
-    except SessionNotCreatedException as e:
-        print('SessionNotCreatedException - try again')
-        logging.debug(e)
-        try:
-            driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)
-        except SessionNotCreatedException as s:
-            print('Terminating')
-            logging.debug(s)
-    return driver
 
 
 
@@ -77,20 +59,59 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_job_description_links(title_selector, url):
+def _get_job_description_links(title_selector, soup):
+    return soup('a', title_selector)
+
+def _add_site_id(site_id, hrefs):
+    return [f'http://{site_id}.com{ref}' for ref in hrefs]
+
+
+def _title_meets_threshold(title, title_word_values, threshold=90):
+    total = 0
+    if not title:
+        return False
+    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title)
+    t = re.sub(r"(?<=[A-z])\-(?=[A-z])", " ", t)
+    for word, value in title_word_values.items():
+        if word.lower() in t.lower():
+            total+=value
+    if total >= threshold:
+        return True
+    return False
+
+
+
+
+
+def _get_soup(url):
     page = urllib2.urlopen(url)
     soup = beautiful(page, 'html.parser')
-    links = soup(title_selector)
-    return [str(link) for link in links]
+    return soup
+
+
 
 
 '''   TEMP   '''
-
-
 site_id = 'stackoverflow'
+original_title = 'data science engineer'
+title_selector =  SITES_DICT[site_id]['title_selector']
+title_word_values = TITLES[original_title][0]
 title_sep = SITES_DICT[site_id]['title_word_sep']
-title = _build_job_title('data science engineer', title_sep)
+title = _build_job_title(original_title, title_sep)
 
 template = SITES_DICT['stackoverflow']['url_template']
 zipcode = '95054'
-url = _build_site_url(site_id, template, title, zipcode, radius='90', age='60')
+url = _build_site_url(site_id , template, title, zipcode, radius='90', age='60')
+soup = _get_soup(url)
+
+anchors = _get_job_description_links(title_selector, soup)
+titles = [anchor.get('title') for anchor in anchors]
+hrefs = [ref.get('href') for ref in anchors]
+ref_dict = dict(list(zip(titles, hrefs)))
+filterd_links = list()
+for title, value in ref_dict.items():
+    if _title_meets_threshold(title, title_word_values):
+        filterd_links.append(ref_dict[title])
+links = [f'http://{site_id}.com' + link for link in filterd_links]
+
+
