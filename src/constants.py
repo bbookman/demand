@@ -24,7 +24,7 @@ SITES_DICT = {
             'title_word_sep': '+',
         },
         'ziprecruiter': {
-            'url_template': 'https://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
+            'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
             'title_selector': 'job_link',
             'title_word_sep': '+',
 
