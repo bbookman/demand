@@ -1,8 +1,7 @@
 import sys, re
-import urllib.request as urllib2
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
-from requests import Request, Session
+import requests
 
 matching_titles = set()
 missing_titles = set()
@@ -61,18 +60,18 @@ def _build_job_title(title, title_separator):
 def _get_job_description_links(title_selector, soup):
     return soup('a', title_selector)
 
-def _add_site_id(site_id, hrefs):
-    return [f'http://{site_id}.com{ref}' for ref in hrefs]
+def _add_site_id(site_id, ref):
+    return f'http://{site_id}.com{ref}'
 
 
 def _title_meets_threshold(title, title_word_values, threshold=90):
     total = 0
     if not title:
         return False
-    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title)
+    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title.lower())
     t = re.sub(r"(?<=[A-z])\-(?=[A-z])", " ", t)
     for word, value in title_word_values.items():
-        if word.lower() in t.lower():
+        if word.lower() in t:
             total+=value
     if total >= threshold:
         return True
@@ -80,20 +79,12 @@ def _title_meets_threshold(title, title_word_values, threshold=90):
 
 def _get_soup(url):
 
-    '''
-
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Custom user agent'})
-
-    session.get('https://httpbin.org/headers')
-    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
-    '''
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
-    #page = urllib2.urlopen(url)
     session = requests.Session()
     session.headers.update({'User-Agent': user_agent})
-    soup = beautiful(session, 'html.parser')
+    response = session.get(url)
+    body = response.text
+    soup = beautiful(body, 'html.parser')
     return soup
 
 def _clean_text(text):
