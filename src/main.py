@@ -1,5 +1,5 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
-from utility import _build_site_url, _build_job_title, _get_jd_links_by_selector, _title_meets_threshold, _clean_text, _get_soup, _make_time_string, _add_site_id, _get_jd_links_by_brute_force, _get_titles_by_class
+from utility import _build_site_url, _build_job_title, _get_jd_links_by_selector, _title_meets_threshold, _clean_text, _get_soup, _make_time_string, _add_site_id, _get_jd_links_by_brute_force, _get_titles_by_class, _filter_links
 import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -26,17 +26,20 @@ if __name__ == '__main__':
             if site_id in ids:
                 anchors = _get_jd_links_by_selector(link_selector, soup)
                 titles = [anchor.get('title') for anchor in anchors]
-                hrefs = [ref.get('href') for ref in anchors]
+                hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
             elif site_id ==  'ziprecruiter':
                 anchors = _get_jd_links_by_brute_force(soup)
                 hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
+                links = _filter_links(hrefs, link_selector)
                 titles = _get_titles_by_class(title_selector, tag, soup)
-                import pdb; pdb.set_trace()
-                print()
-            ref_dict = dict(list(zip(titles, hrefs)))
+            ref_dict = dict(list(zip(titles, links)))
+            #import pdb; pdb.set_trace()
             for title, ref in ref_dict.items():
                 if _title_meets_threshold(title, title_word_values):
-                    link =  _add_site_id(site_id, ref)
+                    if site_id == 'stackoverflow':
+                        link =  _add_site_id(site_id, ref)
+                    else:
+                        link = ref
                     print(f'met threshold: {title}, url:{link}')
                     data = _get_soup(link)
                     text = data.get_text()
@@ -53,7 +56,7 @@ if __name__ == '__main__':
                 else:
                     print(f'title:{title} does not meet threshold')
     print(job_skills)
-    file_name = f'{title}_{zipcode}_results.txt'
+    file_name = f'{original_title}_{zipcode}_results.txt'
     with open(file_name, 'w') as file:
         file.write(f'[{original_title}: [{zip}: {job_skills}  ]]')
 

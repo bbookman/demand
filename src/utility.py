@@ -100,6 +100,10 @@ def _get_titles_by_class(selector, tag, soup):
     return [title.text for title in title_objects]
 
 
+def _filter_links(links, link_selector):
+    return [link for link in links if link_selector.lower() in link.lower()]
+
+
 def _like(string):
     """
     Return a compiled regular expression that matches the given
