@@ -22,34 +22,20 @@ if __name__ == '__main__':
             url = _build_site_url(template, title, zipcode, radius='90', age='60')
             print(f'site: {site_id}, title:{original_title}, url:{url}')
             soup = _get_soup(url)
-            by_selector = ['stackoverflow', 'indeed', ]
-            by_anchor = ['ziprecruiter', 'careerbuilder']
+            by_selector = ['stackoverflow', 'indeed', ] #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
+            by_anchor = ['ziprecruiter', 'careerbuilder'] #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
             if site_id in  by_selector:
                 anchors = _get_jd_links_by_selector(link_selector, soup)
                 titles = [anchor.get('title') for anchor in anchors]
                 hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
             elif site_id in by_anchor:
                 anchors = _get_jd_links_by_anchor(soup)
-                if site_id == 'ziprecruiter':
-                    titles = _get_titles_by_class(title_class, tag, soup)
-                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
-                    # links???
-                    ref_dict = dict(list(zip(titles, links)))
-
-
-                elif site_id == 'careerbuilder':
-                    titles = [anchor.text for anchor in anchors]
-                    hrefs = [_add_site_id(site_id, anchor.get('href')) for anchor in anchors if anchor.get('href') is not None]
-                    ref_dict = dict(list(zip(titles, links)))
-
-
-
-
-
-
+                titles = [anchor.text for anchor in anchors]
+                hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
+            ref_dict = dict(list(zip(titles, hrefs)))
             for title, ref in ref_dict.items():
                 if _title_meets_threshold(title, title_word_values):
-                    if site_id == 'stackoverflow':
+                    if site_id == 'stackoverflow' or site_id == 'careerbuilder':  #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
                         link =  _add_site_id(site_id, ref)
                     else:
                         link = ref
