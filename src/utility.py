@@ -1,4 +1,4 @@
-import sys, re
+import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import requests
@@ -28,7 +28,7 @@ def _make_time_string():
 
 
 
-def _build_site_url(site_id, template, title, zipcode='', radius='90', age='60'):
+def _build_site_url(template, title, zipcode='', radius='90', age='60'):
     """ Makes an url with each query item inserted into the url template
     site_id: type = str, value of site id like 'indeed' or 'careerbuilder'
     template: type = str, the url template.  example: 'http://indeed.com?{}&afg=&rfr=&title={}'
@@ -39,12 +39,9 @@ def _build_site_url(site_id, template, title, zipcode='', radius='90', age='60')
 
     returns an url string
     """
-    if site_id == 'indeed' or site_id =='ziprecruiter' or site_id == 'stackoverflow':
-        return template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
-    if site_id == 'careerbuilder':
-        cbtitle = _build_job_title(title, '-')
-        title = _build_job_title(title, '+')
-        return template.format(title = title, zipcode = zipcode, radius = radius, age = age, cbtitle = cbtitle)
+
+    return template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
+
 
 def _build_job_title(title, title_separator):
     """ Takes list of title words and adds site specific separator between words
@@ -58,7 +55,7 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_jd_links_by_brute_force(soup):
+def _get_jd_links_by_anchor(soup):
     return soup('a')
 
 

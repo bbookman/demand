@@ -19,13 +19,12 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 SITES_DICT = {
 
-    'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
-        'link_selector': 'clk',
+    'careerbuilder': {
+        'url_template': 'https://www.careerbuilder.com/jobs?keywords={title}&location={zipcode}&radius={radius}&posted={age}',
+        'link_selector': 'siteid',
         'title_word_sep': '+',
-        'title_selector': 'just_job_title',
-        'title_selector_tag': 'span',
-
+        'title_class': '',
+        'title_selector_tag': '',
     },
 
 }
@@ -42,27 +41,36 @@ TITLES = {
             'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
             'link_selector': 's-link',
             'title_word_sep': '+',
+             'title_class': '',
+             'title_selector_tag': '',
         },
+      
         'ziprecruiter': {
-            'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
-            'link_selector': 'clk',
-            'title_word_sep': '+',
-            'title_selector': 'just_job_title'
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
+        'link_selector': 'clk',
+        'title_word_sep': '+',
+        'title_class': 'just_job_title',
+        'title_selector_tag': 'span',
 
         },
+
 
         'careerbuilder': {
-            'url_template': 'https://www.careerbuilder.com/jobs-{cbtitle}-in-{zipcode}?keywords={title}&location={zipcode}&radius={radius}&posted={age}&',
-            'link_selector': "//h2[@class='job-title show-for-medium-up']//a[@data-gtm='jrp-job-list|job-title-click|{}']",
+            'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
+            'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
             'title_word_sep': '+',
+            'title_class': '',
+            'title_selector_tag': '',
         },
 
         'indeed': {
             'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
             'link_selector': 'turnstileLink',
             'title_word_sep': '+',
+             'title_class': '',
+            'title_selector_tag': '',
         },
+<a data-gtm="jrp-job-list|job-title-click|1" data-job-did="J3Q1ZS6HDCXKK0JH908" data-company-did="CD888N672X35PM4B3L0" href="/job/J3Q1ZS6HDCXKK0JH908?ipath=JRG1&amp;keywords=data+science+engineer&amp;location=95054&amp;searchid=dbcac81f-dc68-41c5-87ca-0c7a57184c3b%3AAPAb7IRe2bg9Z3HKTRTKa2aPtWQoWTSK5A%3D%3D&amp;siteid=cbnsv">Data Scientist</a>
 
 
-<span class="just_job_title" data-job-id="edb949f9">Associates Needed Now! Start ASAP!</span>
 '''

@@ -1,6 +1,6 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
-from utility import _build_site_url, _build_job_title, _get_jd_links_by_selector, _title_meets_threshold, _clean_text, _get_soup, _make_time_string, _add_site_id, _get_jd_links_by_brute_force, _get_titles_by_class, _filter_links
-import ssl
+from utility import _build_site_url, _build_job_title, _get_jd_links_by_selector, _title_meets_threshold, _clean_text, _get_soup, _make_time_string, _add_site_id, _get_jd_links_by_anchor, _like, _get_titles_by_class, _filter_links
+import ssl, pdb
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     for site_id in SITES_DICT.keys():
         for original_title in TITLES.keys():
-            title_selector = SITES_DICT[site_id]['title_selector']
+            title_class = SITES_DICT[site_id]['title_class']
             tag = SITES_DICT[site_id]['title_selector_tag']
             link_selector = SITES_DICT[site_id]['link_selector']
             title_word_values = TITLES[original_title][0]
@@ -19,21 +19,34 @@ if __name__ == '__main__':
             title = _build_job_title(original_title, title_sep)
             template = SITES_DICT[site_id]['url_template']
             zipcode = '95054' #todo
-            url = _build_site_url(site_id, template, title, zipcode, radius='90', age='60')
+            url = _build_site_url(template, title, zipcode, radius='90', age='60')
             print(f'site: {site_id}, title:{original_title}, url:{url}')
             soup = _get_soup(url)
-            ids = ['stackoverflow', 'indeed', 'careerbulder']
-            if site_id in ids:
+            by_selector = ['stackoverflow', 'indeed', ]
+            by_anchor = ['ziprecruiter', 'careerbuilder']
+            if site_id in  by_selector:
                 anchors = _get_jd_links_by_selector(link_selector, soup)
                 titles = [anchor.get('title') for anchor in anchors]
                 hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
-            elif site_id ==  'ziprecruiter':
-                anchors = _get_jd_links_by_brute_force(soup)
-                hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
-                links = _filter_links(hrefs, link_selector)
-                titles = _get_titles_by_class(title_selector, tag, soup)
-            ref_dict = dict(list(zip(titles, links)))
-            #import pdb; pdb.set_trace()
+            elif site_id in by_anchor:
+                anchors = _get_jd_links_by_anchor(soup)
+                if site_id == 'ziprecruiter':
+                    titles = _get_titles_by_class(title_class, tag, soup)
+                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
+                    # links???
+                    ref_dict = dict(list(zip(titles, links)))
+
+
+                elif site_id == 'careerbuilder':
+                    titles = [anchor.text for anchor in anchors]
+                    hrefs = [_add_site_id(site_id, anchor.get('href')) for anchor in anchors if anchor.get('href') is not None]
+                    ref_dict = dict(list(zip(titles, links)))
+
+
+
+
+
+
             for title, ref in ref_dict.items():
                 if _title_meets_threshold(title, title_word_values):
                     if site_id == 'stackoverflow':
