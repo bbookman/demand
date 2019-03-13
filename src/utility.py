@@ -1,14 +1,11 @@
 import sys, re
-import urllib.request as urllib2
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
-import logging
-from constants import *
-import lxml
-from lxml.html.clean import Cleaner
+import requests
 
 matching_titles = set()
 missing_titles = set()
+MATCH_ALL = r'.*'
 
 def _read_input_file():
     file = open(sys.argv[2], "r")
@@ -61,81 +58,63 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_job_description_links(title_selector, soup):
+def _get_jd_links_by_brute_force(soup):
+    return soup('a')
+
+
+def _get_jd_links_by_selector(title_selector, soup):
     return soup('a', title_selector)
 
-def _add_site_id(site_id, hrefs):
-    return [f'http://{site_id}.com{ref}' for ref in hrefs]
+def _add_site_id(site_id, ref):
+    return f'http://{site_id}.com{ref}'
 
 
 def _title_meets_threshold(title, title_word_values, threshold=90):
     total = 0
     if not title:
         return False
-    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title)
+    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title.lower())
     t = re.sub(r"(?<=[A-z])\-(?=[A-z])", " ", t)
     for word, value in title_word_values.items():
-        if word.lower() in t.lower():
+        if word.lower() in t:
             total+=value
     if total >= threshold:
         return True
     return False
 
 def _get_soup(url):
-    page = urllib2.urlopen(url)
-    soup = beautiful(page, 'html.parser')
+
+    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
+    session = requests.Session()
+    session.headers.update({'User-Agent': user_agent})
+    response = session.get(url)
+    body = response.text
+    soup = beautiful(body, 'html.parser')
     return soup
 
 def _clean_text(text):
     return re.split(r'\W+', text)
 
+def _get_titles_by_class(selector, tag, soup):
+    title_objects = soup(tag, selector)
+    return [title.text for title in title_objects]
 
 
-
-'''   TEMP   '''
-result = dict()
-geo = dict()
-job_skills = dict()
-skills = SKILL_KEYWORDS
-site_id = 'stackoverflow'
-original_title = 'data science engineer'
-title_selector =  SITES_DICT[site_id]['title_selector']
-title_word_values = TITLES[original_title][0]
-title_sep = SITES_DICT[site_id]['title_word_sep']
-title = _build_job_title(original_title, title_sep)
-
-template = SITES_DICT['stackoverflow']['url_template']
-zipcode = '95054'
-url = _build_site_url(site_id , template, title, zipcode, radius='90', age='60')
-soup = _get_soup(url)
-
-anchors = _get_job_description_links(title_selector, soup)
-titles = [anchor.get('title') for anchor in anchors]
-hrefs = [ref.get('href') for ref in anchors]
-ref_dict = dict(list(zip(titles, hrefs)))
-filterd_links = list()
-for title, value in ref_dict.items():
-    if _title_meets_threshold(title, title_word_values):
-        filterd_links.append(ref_dict[title])
-links = [f'http://{site_id}.com' + link for link in filterd_links]
-for link in links:
-    data = _get_soup(link)
-    text = data.get_text()
-    clean_text = _clean_text(text)
-    hits = set()
-    for skill in skills:
-        job_skills.setdefault(skill, 0)
-        if skill in hits:
-            break
-        for word in clean_text:
-            if word.lower() == skill.lower():
-                hits.add(skill.lower())
-                job_skills[skill]+=1
+def _filter_links(links, link_selector):
+    return [link for link in links if link_selector.lower() in link.lower()]
 
 
-
-
-
+def _like(string):
+    """
+    Return a compiled regular expression that matches the given
+    string with any prefix and postfix, e.g. if string = "hello",
+    the returned regex matches r".*hello.*"
+    """
+    string_ = string
+    if not isinstance(string_, str):
+        string_ = str(string_)
+    regex = MATCH_ALL + re.escape(string_) + MATCH_ALL
+    return re.compile(regex, flags=re.DOTALL)
 
 
 
