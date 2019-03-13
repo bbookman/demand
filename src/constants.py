@@ -18,11 +18,15 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 
 SITES_DICT = {
-        'stackoverflow': {
-            'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
-            'title_selector': 's-link',
-            'title_word_sep': '+',
-        },
+
+    'ziprecruiter': {
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
+        'link_selector': 'clk',
+        'title_word_sep': '+',
+        'title_selector': 'just_job_title',
+        'title_selector_tag': 'span',
+
+    },
 
 }
 
@@ -34,24 +38,31 @@ TITLES = {
 }
 
 '''
+        'stackoverflow': {
+            'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
+            'link_selector': 's-link',
+            'title_word_sep': '+',
+        },
         'ziprecruiter': {
             'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
-            'title_selector': 'job_link',
+            'link_selector': 'clk',
             'title_word_sep': '+',
+            'title_selector': 'just_job_title'
 
         },
 
         'careerbuilder': {
             'url_template': 'https://www.careerbuilder.com/jobs-{cbtitle}-in-{zipcode}?keywords={title}&location={zipcode}&radius={radius}&posted={age}&',
-            'title_selector': "//h2[@class='job-title show-for-medium-up']//a[@data-gtm='jrp-job-list|job-title-click|{}']",
+            'link_selector': "//h2[@class='job-title show-for-medium-up']//a[@data-gtm='jrp-job-list|job-title-click|{}']",
             'title_word_sep': '+',
         },
 
         'indeed': {
             'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
-            'title_selector': 'turnstileLink',
+            'link_selector': 'turnstileLink',
             'title_word_sep': '+',
         },
 
 
+<span class="just_job_title" data-job-id="edb949f9">Associates Needed Now! Start ASAP!</span>
 '''

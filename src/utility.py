@@ -5,6 +5,7 @@ import requests
 
 matching_titles = set()
 missing_titles = set()
+MATCH_ALL = r'.*'
 
 def _read_input_file():
     file = open(sys.argv[2], "r")
@@ -57,7 +58,11 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_job_description_links(title_selector, soup):
+def _get_jd_links_by_brute_force(soup):
+    return soup('a')
+
+
+def _get_jd_links_by_selector(title_selector, soup):
     return soup('a', title_selector)
 
 def _add_site_id(site_id, ref):
@@ -90,9 +95,22 @@ def _get_soup(url):
 def _clean_text(text):
     return re.split(r'\W+', text)
 
+def _get_titles_by_class(selector, tag, soup):
+    title_objects = soup(tag, selector)
+    return [title.text for title in title_objects]
 
 
-
+def _like(string):
+    """
+    Return a compiled regular expression that matches the given
+    string with any prefix and postfix, e.g. if string = "hello",
+    the returned regex matches r".*hello.*"
+    """
+    string_ = string
+    if not isinstance(string_, str):
+        string_ = str(string_)
+    regex = MATCH_ALL + re.escape(string_) + MATCH_ALL
+    return re.compile(regex, flags=re.DOTALL)
 
 
 
