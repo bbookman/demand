@@ -19,6 +19,13 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 SITES_DICT = {
 
+    'indeed': {
+        'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
+        'link_selector': 'turnstileLink',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+    },
 
 }
 
