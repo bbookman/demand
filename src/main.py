@@ -29,7 +29,7 @@ if __name__ == '__main__':
                 anchors = get_anchors_by_selector(link_selector, soup)
                 titles = [anchor.get('title') for anchor in anchors]
                 hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
-            elif anchor_method == ' all':
+            elif anchor_method == 'all':
                 anchors = get_all_anchors(soup)  #GET all anchors
                 if site_id == 'careerbuilder': #GET TITLES FROM ANCHOR
                     titles = [anchor.text for anchor in anchors]
