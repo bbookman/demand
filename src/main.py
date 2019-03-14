@@ -31,15 +31,18 @@ if __name__ == '__main__':
                 hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
             elif anchor_method == 'all':
                 anchors = get_all_anchors(soup)  #GET all anchors
-                if site_id == 'careerbuilder': #GET TITLES FROM ANCHOR
-                    titles = [anchor.text for anchor in anchors]
-                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
-                if site_id == 'ziprecruiter':  #GET anchors by tag
+
+
+                if tag:
                     titles = list()
                     hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
                     for ref in hrefs:
                         data = get_soup(ref)
                         titles.append(get_title_by_tag(title_selector, tag, data))
+                else:
+                    titles = [anchor.text for anchor in anchors]
+                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
+                    
             ref_dict = dict(list(zip(titles, hrefs)))
 
             for title, ref in ref_dict.items():
