@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
             for title, ref in ref_dict.items():
                 if _title_meets_threshold(title, title_word_values):
-                    if site_id == 'stackoverflow' or site_id == 'careerbuilder':  #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
+                    if site_id == 'stackoverflow' or site_id == 'careerbuilder' or site_id == 'indeed':  #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
                         link =  _add_site_id(site_id, ref)
                     else:
                         link = ref
