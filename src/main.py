@@ -66,7 +66,7 @@ if __name__ == '__main__':
     print(job_skills)
     file_name = f'{original_title}_{zipcode}_results.txt'
     with open(file_name, 'w') as file:
-        file.write(f'[{original_title}: [{zip}: {job_skills}  ]]')
+        file.write(f'[{original_title}: [{zipcode}: {job_skills}  ]]')
 
 
     end = _make_time_string()
