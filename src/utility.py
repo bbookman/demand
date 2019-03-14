@@ -92,9 +92,14 @@ def _get_soup(url):
 def _clean_text(text):
     return re.split(r'\W+', text)
 
-def _get_titles_by_class(selector, tag, soup):
-    title_objects = soup(tag, selector)
-    return [title.text for title in title_objects]
+def _get_title_by_tag(selector, tag, soup):
+    data = soup(tag, selector)
+    text = ''
+    if data:
+        text = data[0].text
+        text = text.strip('\n')
+        text = text.strip()
+    return text
 
 
 def _filter_links(links, link_selector):
