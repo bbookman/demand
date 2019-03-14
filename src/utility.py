@@ -7,28 +7,28 @@ matching_titles = set()
 missing_titles = set()
 MATCH_ALL = r'.*'
 
-def _read_input_file():
+def read_input_file():
     file = open(sys.argv[2], "r")
     results = file.read()
     file.close()
     return results
 
-def _get_zip_code():
+def get_zip_code():
     return sys.argv[1]
 
-def _make_date_string():
+def make_date_string():
     stamp = datetime.now()
     date_string = stamp.strftime('%Y-%d-%m-%H-%M-%S')
     return date_string
 
-def _make_time_string():
+def make_time_string():
     stamp = datetime.now()
     time_string = stamp.strftime('%H:%M')
     return time_string
 
 
 
-def _build_site_url(template, title, zipcode='', radius='90', age='60'):
+def build_site_url(template, title, zipcode='', radius='90', age='60'):
     """ Makes an url with each query item inserted into the url template
     site_id: type = str, value of site id like 'indeed' or 'careerbuilder'
     template: type = str, the url template.  example: 'http://indeed.com?{}&afg=&rfr=&title={}'
@@ -43,7 +43,7 @@ def _build_site_url(template, title, zipcode='', radius='90', age='60'):
     return template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
 
 
-def _build_job_title(title, title_separator):
+def build_job_title(title, title_separator):
     """ Takes list of title words and adds site specific separator between words
     title: string
     separator: type = string
@@ -55,11 +55,11 @@ def _build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
-def _get_jd_links_by_anchor(soup):
+def get_all_anchors(soup):
     return soup('a')
 
 
-def _get_jd_links_by_selector(title_selector, soup):
+def get_anchors_by_selector(title_selector, soup):
     return soup('a', title_selector)
 
 def _add_site_id(site_id, ref):
@@ -79,7 +79,7 @@ def _title_meets_threshold(title, title_word_values, threshold=90):
         return True
     return False
 
-def _get_soup(url):
+def get_soup(url):
 
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
     session = requests.Session()
@@ -89,10 +89,10 @@ def _get_soup(url):
     soup = beautiful(body, 'html.parser')
     return soup
 
-def _clean_text(text):
+def clean_text(text):
     return re.split(r'\W+', text)
 
-def _get_title_by_tag(selector, tag, soup):
+def get_title_by_tag(selector, tag, soup):
     data = soup(tag, selector)
     text = ''
     if data:
@@ -102,11 +102,11 @@ def _get_title_by_tag(selector, tag, soup):
     return text
 
 
-def _filter_links(links, link_selector):
+def filter_links(links, link_selector):
     return [link for link in links if link_selector.lower() in link.lower()]
 
 
-def _like(string):
+def like(string):
     """
     Return a compiled regular expression that matches the given
     string with any prefix and postfix, e.g. if string = "hello",

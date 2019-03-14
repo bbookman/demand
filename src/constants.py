@@ -25,6 +25,8 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': '',
         'title_tag': '',
+        'anchor_method': 'selector'
+
     },
     'ziprecruiter': {
         'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
@@ -32,6 +34,7 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': 'job_title',
         'title_tag': 'h1',
+        'anchor_method': 'all'
 
     },
 
@@ -41,6 +44,7 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': '',
         'title_tag': '',
+        'anchor_method': 'all'
     },
 
     'indeed': {
@@ -49,6 +53,7 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': '',
         'title_tag': '',
+        'anchor_method': 'selector',
     },
 
 }
@@ -60,40 +65,3 @@ TITLES = {
     'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
 }
 
-'''
-
-
-        'stackoverflow': {
-            'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
-            'link_selector': 's-link',
-            'title_word_sep': '+',
-             'title_selector': '',
-             'title_tag': '',
-        },
-     'ziprecruiter': {
-            'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
-            'link_selector': 'clk',
-            'title_word_sep': '+',
-            'title_selector': 'job_title',
-            'title_tag': 'h1',
-    
-        },
-
-
-
-        'careerbuilder': {
-            'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
-            'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
-            'title_word_sep': '+',
-            'title_selector': '',
-            'title_tag': '',
-        },
-
-        'indeed': {
-            'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
-            'link_selector': 'turnstileLink',
-            'title_word_sep': '+',
-             'title_selector': '',
-            'title_tag': '',
-        },
-'''
