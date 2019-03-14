@@ -19,14 +19,6 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 SITES_DICT = {
 
-    'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
-        'link_selector': 'clk',
-        'title_word_sep': '+',
-        'title_selector': 'job_title',
-        'title_tag': 'h1',
-
-    },
 
 }
 
@@ -49,15 +41,15 @@ job_link
              'title_selector': '',
              'title_tag': '',
         },
-      
-        'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
-        'link_selector': 'clk',
-        'title_word_sep': '+',
-        'title_selector': 'just_job_title',
-        'title_tag': 'span',
-
+     'ziprecruiter': {
+            'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
+            'link_selector': 'clk',
+            'title_word_sep': '+',
+            'title_selector': 'job_title',
+            'title_tag': 'h1',
+    
         },
+
 
 
         'careerbuilder': {
