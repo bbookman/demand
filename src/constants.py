@@ -25,7 +25,8 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': '',
         'title_tag': '',
-        'anchor_method': 'selector'
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
 
     },
     'ziprecruiter': {
@@ -34,7 +35,8 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': 'job_title',
         'title_tag': 'h1',
-        'anchor_method': 'all'
+        'anchor_method': 'all',
+        'prepend_site_id': False,
 
     },
 
@@ -44,7 +46,8 @@ SITES_DICT = {
         'title_word_sep': '+',
         'title_selector': '',
         'title_tag': '',
-        'anchor_method': 'all'
+        'anchor_method': 'all',
+        'prepend_site_id': True,
     },
 
     'indeed': {
@@ -54,6 +57,7 @@ SITES_DICT = {
         'title_selector': '',
         'title_tag': '',
         'anchor_method': 'selector',
+        'prepend_site_id': True,
     },
 
 }

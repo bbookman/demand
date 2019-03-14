@@ -20,6 +20,7 @@ if __name__ == '__main__':
             title_sep = SITES_DICT[site_id]['title_word_sep']
             title = build_job_title(original_title, title_sep)
             template = SITES_DICT[site_id]['url_template']
+            prepend = SITES_DICT[site_id]['prepend_site_id']
             zipcode = '95054' #todo
             url = build_site_url(template, title, zipcode, radius='90', age='60')
             soup = get_soup(url)
@@ -30,9 +31,7 @@ if __name__ == '__main__':
                 titles = [anchor.get('title') for anchor in anchors]
                 hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
             elif anchor_method == 'all':
-                anchors = get_all_anchors(soup)  #GET all anchors
-
-
+                anchors = get_all_anchors(soup)
                 if tag:
                     titles = list()
                     hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
@@ -42,12 +41,12 @@ if __name__ == '__main__':
                 else:
                     titles = [anchor.text for anchor in anchors]
                     hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
-                    
+
             ref_dict = dict(list(zip(titles, hrefs)))
 
             for title, ref in ref_dict.items():
                 if _title_meets_threshold(title, title_word_values):
-                    if site_id == 'stackoverflow' or site_id == 'careerbuilder' or site_id == 'indeed':  #TODO SITES_DICT VARIABLE SHOULD DETERMINE THIS
+                    if prepend:
                         link =  _add_site_id(site_id, ref) #REQUIRES APPENDING SITE ID
                     else:
                         link = ref
