@@ -19,12 +19,13 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 SITES_DICT = {
 
-    'careerbuilder': {
-        'url_template': 'https://www.careerbuilder.com/jobs?keywords={title}&location={zipcode}&radius={radius}&posted={age}',
-        'link_selector': 'siteid',
+    'ziprecruiter': {
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
+        'link_selector': 'clk',
         'title_word_sep': '+',
-        'title_class': '',
-        'title_selector_tag': '',
+        'title_selector': 'job_title',
+        'title_tag': 'h1',
+
     },
 
 }
@@ -37,20 +38,24 @@ TITLES = {
 }
 
 '''
+
+job_link
+
+
         'stackoverflow': {
             'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
             'link_selector': 's-link',
             'title_word_sep': '+',
-             'title_class': '',
-             'title_selector_tag': '',
+             'title_selector': '',
+             'title_tag': '',
         },
       
         'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}&',
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
         'link_selector': 'clk',
         'title_word_sep': '+',
-        'title_class': 'just_job_title',
-        'title_selector_tag': 'span',
+        'title_selector': 'just_job_title',
+        'title_tag': 'span',
 
         },
 
@@ -59,18 +64,22 @@ TITLES = {
             'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
             'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
             'title_word_sep': '+',
-            'title_class': '',
-            'title_selector_tag': '',
+            'title_selector': '',
+            'title_tag': '',
         },
 
         'indeed': {
             'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
             'link_selector': 'turnstileLink',
             'title_word_sep': '+',
-             'title_class': '',
-            'title_selector_tag': '',
+             'title_selector': '',
+            'title_tag': '',
         },
-<a data-gtm="jrp-job-list|job-title-click|1" data-job-did="J3Q1ZS6HDCXKK0JH908" data-company-did="CD888N672X35PM4B3L0" href="/job/J3Q1ZS6HDCXKK0JH908?ipath=JRG1&amp;keywords=data+science+engineer&amp;location=95054&amp;searchid=dbcac81f-dc68-41c5-87ca-0c7a57184c3b%3AAPAb7IRe2bg9Z3HKTRTKa2aPtWQoWTSK5A%3D%3D&amp;siteid=cbnsv">Data Scientist</a>
 
-
+<h1 class="job_title" data-wkjt="Software Engineer Data Science">
+        Senior Software Engineer - Data Science (704750)      </h1>
+        
+        
+        
+'https://www.ziprecruiter.com/clk/lancesoft-inc-148efd71-data-science-engineer-8942f8b9?clk=jRY5UZSchTtaXsilgGnI56fQdEi3svROYVhw6CoF9_WwubRP87xotMI3TkPg3KBJIvxIsT4gMtt4SK0kSHh5mGI28DAC0R_Cm2vievJXMVm9D_wHH8rTxXy0z36JKJSf3OJn1QcwgfE-F1nhNxKAmjJpoUmOeXXfKqEQd79j4URtgfi3ZBqlNQKZIUlOeNhqJ4uc_JnWyl6yhgVwANmgfPor3BP9YIZZGTU1n98HwtYfRBNKS4RHFc0pwcWM8FXCMBlLxXoBfvFi-MO-Ci0sPsqsZyaui0xWmgErMuieryPMogFMv_dw6CEZoN8vp2rmAG86Jb1aS_1o--LdwD4MBMSIyjMJAI6pSZ8vxlS7hgQRaFml4mXN0_-8u56IjRaUdv45TuQflijxeO6f1
 '''
