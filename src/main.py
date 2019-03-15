@@ -39,6 +39,8 @@ if __name__ == '__main__':
                     titles = list()
                     hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
                     for ref in hrefs:
+                        if prepend:
+                            ref = _add_site_id(site_id, ref)
                         data = get_soup(ref)
                         titles.append(get_title_by_tag(title_selector, tag, data))
                 else:
