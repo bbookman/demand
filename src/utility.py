@@ -1,20 +1,19 @@
-import re, sys
-import urllib.request as urllib2
+import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
-import logging
+import requests
 
 matching_titles = set()
 missing_titles = set()
+MATCH_ALL = r'.*'
 
 def read_input_file():
-    file = open(sys.argv[2], "r")
-    results = file.read()
-    file.close()
+    file = sys.argv[2]
+    #?????
     return results
 
 def get_zip_code():
-    return = sys.argv[1]
+    return sys.argv[1]
 
 def make_date_string():
     stamp = datetime.now()
@@ -26,28 +25,9 @@ def make_time_string():
     time_string = stamp.strftime('%H:%M')
     return time_string
 
-def _start_driver():
-    """ Starts the chrome webdriver in headless mode """
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('window-size=1920x1080')
-    try:
-        driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)
-    except SessionNotCreatedException as e:
-        print('SessionNotCreatedException - try again')
-        logging.debug(e)
-        try:
-            driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)
-        except SessionNotCreatedException as s:
-            print('Terminating')
-            logging.debug(s)
-    return driver
 
 
-
-
-def _build_site_url(site_id, template, title, zipcode='', radius='60', age='60'):
+def build_site_url(template, title, zipcode='', radius='90', age='60'):
     """ Makes an url with each query item inserted into the url template
     site_id: type = str, value of site id like 'indeed' or 'careerbuilder'
     template: type = str, the url template.  example: 'http://indeed.com?{}&afg=&rfr=&title={}'
@@ -58,14 +38,11 @@ def _build_site_url(site_id, template, title, zipcode='', radius='60', age='60')
 
     returns an url string
     """
-    if site_id == 'indeed' or site_id =='ziprecruiter' or site_id == 'stackoverflow':
-        return template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
-    if site_id == 'careerbuilder':
-        cbtitle = _build_job_title(title, '-')
-        title = _build_job_title(title, '+')
-        return template.format(title = title, zipcode = zipcode, radius = radius, age = age, cbtitle = cbtitle)
 
-def _build_job_title(title, title_separator):
+    return template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
+
+
+def build_job_title(title, title_separator):
     """ Takes list of title words and adds site specific separator between words
     title: string
     separator: type = string
@@ -76,3 +53,73 @@ def _build_job_title(title, title_separator):
     for word in words:
         result+= word + title_separator
     return result[:-1]
+
+def get_all_anchors(soup):
+    return soup('a')
+
+
+def get_anchors_by_selector(title_selector, soup):
+    return soup('a', title_selector)
+
+def _add_site_id(site_id, ref):
+    return f'http://{site_id}.com{ref}'
+
+
+def _title_meets_threshold(title, title_word_values, threshold=90):
+    total = 0
+    if not title:
+        return False
+    t = re.sub(r"(?<=[A-z])\&(?=[A-z])", " ", title.lower())
+    t = re.sub(r"(?<=[A-z])\-(?=[A-z])", " ", t)
+    for word, value in title_word_values.items():
+        if word.lower() in t:
+            total+=value
+    if total >= threshold:
+        return True
+    return False
+
+def get_soup(url):
+
+    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
+    session = requests.Session()
+    session.headers.update({'User-Agent': user_agent})
+    response = session.get(url)
+    body = response.text
+    soup = beautiful(body, 'html.parser')
+    return soup
+
+def clean_text(text):
+    return re.split(r'\W+', text)
+
+def get_title_by_tag(selector, tag, soup):
+    data = soup(tag, selector)
+    text = ''
+    if data:
+        text = data[0].text
+        text = text.strip('\n')
+        text = text.strip()
+    return text
+
+
+def filter_links(links, link_selector):
+    return [link for link in links if link_selector.lower() in link.lower()]
+
+
+def like(string):
+    """
+    Return a compiled regular expression that matches the given
+    string with any prefix and postfix, e.g. if string = "hello",
+    the returned regex matches r".*hello.*"
+    """
+    string_ = string
+    if not isinstance(string_, str):
+        string_ = str(string_)
+    regex = MATCH_ALL + re.escape(string_) + MATCH_ALL
+    return re.compile(regex, flags=re.DOTALL)
+
+
+
+
+
+
+
