@@ -69,3 +69,18 @@ TITLES = {
     'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
 }
 
+'''
+'dice': {
+    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=500&radius={radius}&postedDate={age}',
+    'link_selector': 'jobs',
+    'title_word_sep': '+',
+    'title_selector': 'jobTitle',
+    'title_tag': 'h1',
+    'anchor_method': 'all',
+    'prepend_site_id': True,
+
+
+},
+
+
+'''
