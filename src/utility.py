@@ -8,9 +8,8 @@ missing_titles = set()
 MATCH_ALL = r'.*'
 
 def read_input_file():
-    file = open(sys.argv[2], "r")
-    results = file.read()
-    file.close()
+    file = sys.argv[2]
+    #?????
     return results
 
 def get_zip_code():
