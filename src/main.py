@@ -1,11 +1,13 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
-from utility import build_site_url, build_job_title, get_anchors_by_selector, _title_meets_threshold, clean_text, get_soup, make_time_string, _add_site_id, get_all_anchors, like, get_title_by_tag, filter_links
+from utility import  get_zip_code, build_site_url, build_job_title, get_anchors_by_selector, _title_meets_threshold, clean_text, get_soup, make_time_string, _add_site_id, get_all_anchors, like, get_title_by_tag, filter_links
 import ssl, pdb
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 if __name__ == '__main__':
     start = make_time_string()
+
+
     skills = [skill.lower() for skill in SKILL_KEYWORDS]
     job_skills = {}
 
@@ -21,7 +23,8 @@ if __name__ == '__main__':
             title = build_job_title(original_title, title_sep)
             template = SITES_DICT[site_id]['url_template']
             prepend = SITES_DICT[site_id]['prepend_site_id']
-            zipcode = '95054' #todo
+            zipcode = get_zip_code()
+            #pdb.set_trace()
             url = build_site_url(template, title, zipcode, radius='90', age='60')
             soup = get_soup(url)
 
