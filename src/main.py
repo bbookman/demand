@@ -1,18 +1,21 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
-from utility import  get_zip_code, build_site_url, build_job_title, get_anchors_by_selector, _title_meets_threshold, clean_text, get_soup, make_time_string, _add_site_id, get_all_anchors, like, get_title_by_tag, filter_links
-import ssl, pdb
+from utility import *
+import ssl, pdb, time
+import timeout_decorator
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 if __name__ == '__main__':
     start = make_time_string()
-
+    d = make_date_string()
+    set_log(f'app_{d}.log', logging.DEBUG)   #todo make level a command line arg or setting in param file
 
     skills = [skill.lower() for skill in SKILL_KEYWORDS]
     job_skills = {}
 
     for site_id in SITES_DICT.keys():
-        print(f'START: {site_id}')
+        print_and_log(f'START: {site_id}', 'debug')
         for original_title in TITLES.keys():
             anchor_method = SITES_DICT[site_id]['anchor_method']
             title_selector = SITES_DICT[site_id]['title_selector']
@@ -24,10 +27,8 @@ if __name__ == '__main__':
             template = SITES_DICT[site_id]['url_template']
             prepend = SITES_DICT[site_id]['prepend_site_id']
             zipcode = get_zip_code()
-            #pdb.set_trace()
             url = build_site_url(template, title, zipcode, radius='90', age='60')
             soup = get_soup(url)
-
 
             if anchor_method == 'selector':
                 anchors = get_anchors_by_selector(link_selector, soup)
@@ -40,7 +41,7 @@ if __name__ == '__main__':
                     hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
                     for ref in hrefs:
                         if prepend:
-                            ref = _add_site_id(site_id, ref)
+                            ref = add_site_id(site_id, ref)
                         data = get_soup(ref)
                         titles.append(get_title_by_tag(title_selector, tag, data))
                 else:
@@ -50,25 +51,30 @@ if __name__ == '__main__':
             ref_dict = dict(list(zip(titles, hrefs)))
 
             for title, ref in ref_dict.items():
+                dups = set()
                 if _title_meets_threshold(title, title_word_values):
                     if prepend:
-                        link =  _add_site_id(site_id, ref) #REQUIRES APPENDING SITE ID
+                        link =  add_site_id(site_id, ref) #REQUIRES APPENDING SITE ID
                     else:
                         link = ref
                     if link:
-                        data = get_soup(link)
-                        text = data.get_text()
-                        ctext = clean_text(text)
-                        hits = set()
-                        for skill in skills:
-                            job_skills.setdefault(skill, 0)
-                            if skill not in hits:
-                                data = [word.lower() for word in ctext]
-                                if skill.lower() in data:
-                                        hits.add(skill.lower())
-                                        job_skills[skill.lower()] += 1
+                        if link not in dups:
+                            dups.add(link)
+                            data = get_soup(link)
+                            text = data.get_text()
+                            ctext = clean_text(text)
+                            hits = set()
+                            for skill in skills:
+                                job_skills.setdefault(skill, 0)
+                                if skill not in hits:
+                                    data = [word.lower() for word in ctext]
+                                    if skill.lower() in data:
+                                            hits.add(skill.lower())
+                                            job_skills[skill.lower()] += 1
+                        else:
+                            print_and_log('Duplicate link - skipping', 'debug')
                     else:
-                        print(f'{site_id}: invalid url: {ref}')
+                        print_and_log(f'{site_id}: invalid url: {ref}', 'debug')
 
     print(job_skills)
     file_name = f'{original_title}_{zipcode}_results.txt'
@@ -77,5 +83,5 @@ if __name__ == '__main__':
 
 
     end = make_time_string()
-    print(f'start: {start}, end: {end}')
     print(f'RESULTS: {file_name}')
+    print_and_log(f'start: {start}, end: {end}', 'debug')

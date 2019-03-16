@@ -1,20 +1,23 @@
 import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
-import requests
+import requests, logging
 
 matching_titles = set()
 missing_titles = set()
 MATCH_ALL = r'.*'
 
 def read_input_file():
-    print('Reading input file')
+    #todo - what if argument is not there or invalid?
+    print_and_log('Reading input file')
     file = sys.argv[2]
     #?????
     return results
 
 def get_zip_code():
-    print(f'Got command line zip code {sys.argv[1]} ')
+    # First argument ..
+    # todo what if arg is not there or invalid
+    print_and_log(f'Got command line zip code {sys.argv[1]} ')
     return sys.argv[1]
 
 def make_date_string():
@@ -41,7 +44,7 @@ def build_site_url(template, title, zipcode='', radius='90', age='60'):
     returns an url string
     """
     url = template.format(title = title,  zipcode = zipcode, radius = radius, age = age)
-    print(f'Built site url: {url}')
+    print_and_log(f'Built site url: {url}')
     return url
 
 
@@ -58,16 +61,16 @@ def build_job_title(title, title_separator):
     return result[:-1]
 
 def get_all_anchors(soup):
-    print('Getting All Anchors')
+    print_and_log('Getting All Anchors')
     return soup('a')
 
 
 def get_anchors_by_selector(title_selector, soup):
-    print(f'Getting Anchors by selector: {title_selector}')
+    print_and_log(f'Getting Anchors by selector: {title_selector}')
     return soup('a', title_selector)
 
-def _add_site_id(site_id, ref):
-    print('Adding site id to href for complete url')
+def add_site_id(site_id, ref):
+    print_and_log('Adding site id to href for complete url')
     return f'http://{site_id}.com{ref}'
 
 
@@ -82,39 +85,44 @@ def _title_meets_threshold(title, title_word_values, threshold=90):
         if word.lower() in t:
             total+=value
     if total >= threshold:
-        print(f'Met threshold: {title}')
+        print_and_log(f'Met threshold: {title}')
         return True
-    print(f'Not met threshold: {title}')
+    print_and_log(f'Not met threshold: {title}')
     return False
 
 def get_soup(url):
-    print(f'Getting raw html from: {url}' )
+    print_and_log(f'Getting raw html from: {url}' )
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
     session = requests.Session()
     session.headers.update({'User-Agent': user_agent})
-    response = session.get(url)
-    body = response.text
-    soup = beautiful(body, 'html.parser')
-    print('Got raw html')
+    try:
+        response = session.get(url)
+        body = response.text
+        soup = beautiful(body, 'html.parser')
+        print_and_log('Got raw html')
+    except Exception as e:
+        print(e)
+        report(f'SOUP: {soup.prettify()}')
+        report(e)
     return soup
 
 def clean_text(text):
     return re.split(r'\W+', text)
 
 def get_title_by_tag(selector, tag, soup):
-    print(f'Getting job title by tag: {tag}, selector: {selector}')
+    print_and_log(f'Getting job title by tag: {tag}, selector: {selector}')
     data = soup(tag, selector)
     text = ''
     if data:
         text = data[0].text
         text = text.strip('\n')
         text = text.strip()
-    print(f'Got title: {text}')
+    print_and_log(f'Got title: {text}')
     return text
 
 
 def filter_links(links, link_selector):
-    print(f'Filtering links, selector:{link_selector}')
+    print_and_log(f'Filtering links, selector:{link_selector}')
     return [link for link in links if link_selector.lower() in link.lower()]
 
 
@@ -131,8 +139,21 @@ def like(string):
     return re.compile(regex, flags=re.DOTALL)
 
 
+def set_log(filename, level): #todo level options
+    logging.basicConfig(filename=filename, level=level)
 
 
+def report(e: Exception):
+    logging.exception(str(e))
+
+def print_and_log(text, level):
+    print(text)
+    if level == 'debug':
+        logging.debug(text)
+    elif level == 'info':
+        logging.info(text)
+    elif level == 'warning':
+        logging.warning(text)
 
 
 
