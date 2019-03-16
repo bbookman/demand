@@ -4,8 +4,7 @@ from datetime import datetime
 import requests, logging
 import timeout_decorator
 
-matching_titles = set()
-missing_titles = set()
+
 MATCH_ALL = r'.*'
 
 def read_input_file():
