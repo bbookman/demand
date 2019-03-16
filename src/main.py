@@ -56,7 +56,6 @@ if __name__ == '__main__':
                     else:
                         link = ref
                     if link:
-                        print(f'MET THRESHOLD: {title}, url:{link}')
                         data = get_soup(link)
                         text = data.get_text()
                         ctext = clean_text(text)
@@ -68,7 +67,6 @@ if __name__ == '__main__':
                                 if skill.lower() in data:
                                         hits.add(skill.lower())
                                         job_skills[skill.lower()] += 1
-                                        print(f'FOUND SKILL site: {site_id}, title:{title}, {skill}')
                     else:
                         print(f'{site_id}: invalid url: {ref}')
 
