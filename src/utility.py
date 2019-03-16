@@ -2,6 +2,7 @@ import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import requests, logging
+import timeout_decorator
 
 matching_titles = set()
 missing_titles = set()
@@ -17,7 +18,7 @@ def read_input_file():
 def get_zip_code():
     # First argument ..
     # todo what if arg is not there or invalid
-    print_and_log(f'Got command line zip code {sys.argv[1]} ')
+    print_and_log(f'Got command line zip code {sys.argv[1]} ', 'info')
     return sys.argv[1]
 
 def make_date_string():
@@ -60,11 +61,12 @@ def build_job_title(title, title_separator):
         result+= word + title_separator
     return result[:-1]
 
+@timeout_decorator.timeout(10)
 def get_all_anchors(soup):
     print_and_log('Getting All Anchors')
     return soup('a')
 
-
+@timeout_decorator.timeout(10)
 def get_anchors_by_selector(title_selector, soup):
     print_and_log(f'Getting Anchors by selector: {title_selector}')
     return soup('a', title_selector)
@@ -90,6 +92,7 @@ def _title_meets_threshold(title, title_word_values, threshold=90):
     print_and_log(f'Not met threshold: {title}')
     return False
 
+@timeout_decorator.timeout(10)
 def get_soup(url):
     print_and_log(f'Getting raw html from: {url}' )
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
@@ -109,6 +112,7 @@ def get_soup(url):
 def clean_text(text):
     return re.split(r'\W+', text)
 
+@timeout_decorator.timeout(10)
 def get_title_by_tag(selector, tag, soup):
     print_and_log(f'Getting job title by tag: {tag}, selector: {selector}')
     data = soup(tag, selector)
@@ -120,7 +124,7 @@ def get_title_by_tag(selector, tag, soup):
     print_and_log(f'Got title: {text}')
     return text
 
-
+@timeout_decorator.timeout(10)
 def filter_links(links, link_selector):
     print_and_log(f'Filtering links, selector:{link_selector}')
     return [link for link in links if link_selector.lower() in link.lower()]
@@ -146,7 +150,7 @@ def set_log(filename, level): #todo level options
 def report(e: Exception):
     logging.exception(str(e))
 
-def print_and_log(text, level):
+def print_and_log(text, level = 'info'):
     print(text)
     if level == 'debug':
         logging.debug(text)
