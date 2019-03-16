@@ -18,6 +18,42 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
 
 
 SITES_DICT = {
+    'dice': {
+        'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=500&radius={radius}&postedDate={age}',
+        'link_selector': 'jobs',
+        'title_word_sep': '+',
+        'title_selector': 'jobTitle',
+        'title_tag': 'h1',
+        'anchor_method': 'all',
+        'prepend_site_id': True,
+
+        },
+
+
+}
+
+
+TITLES = {
+    #'software quality assurance engineer': [{'software': 50, 'quality': 60, 'assurance': 30, 'qa': 80, 'sqa': 90, 'sdet': 100, 'test': 50, 'automation': 30, 'automated': 30, 'engineer': 20, 'testing': 70},
+     #SKILL_KEYWORDS, True],
+    'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
+}
+
+'''
+'dice': {
+    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
+    'link_selector': 'jobs',
+    'title_word_sep': '+',
+    'title_selector': 'jobTitle',
+    'title_tag': 'h1',
+    'anchor_method': 'all',
+    'prepend_site_id': True,
+
+
+},
+
+
+
 
     'stackoverflow': {
         'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
@@ -59,28 +95,5 @@ SITES_DICT = {
         'anchor_method': 'selector',
         'prepend_site_id': True,
     },
-
-}
-
-
-TITLES = {
-    #'software quality assurance engineer': [{'software': 50, 'quality': 60, 'assurance': 30, 'qa': 80, 'sqa': 90, 'sdet': 100, 'test': 50, 'automation': 30, 'automated': 30, 'engineer': 20, 'testing': 70},
-     #SKILL_KEYWORDS, True],
-    'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
-}
-
-'''
-'dice': {
-    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=500&radius={radius}&postedDate={age}',
-    'link_selector': 'jobs',
-    'title_word_sep': '+',
-    'title_selector': 'jobTitle',
-    'title_tag': 'h1',
-    'anchor_method': 'all',
-    'prepend_site_id': True,
-
-
-},
-
 
 '''
