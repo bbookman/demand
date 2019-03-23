@@ -1,3 +1,5 @@
 beautifulsoup4
 requests
 timeout-decorator
+pandas
+matplotlib
