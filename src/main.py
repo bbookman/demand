@@ -1,7 +1,6 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
 from utility import *
-import ssl, pdb, time
-import timeout_decorator
+import ssl, pdb
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -69,8 +68,9 @@ if __name__ == '__main__':
                                 if skill not in hits:
                                     data = [word.lower() for word in ctext]
                                     if skill.lower() in data:
-                                            hits.add(skill.lower())
-                                            job_skills[skill.lower()] += 1
+                                        print_and_log(f'Found: {skill}')
+                                        hits.add(skill.lower())
+                                        job_skills[skill.lower()] += 1
                         else:
                             print_and_log('Duplicate link - skipping', 'debug')
                     else:
