@@ -30,6 +30,37 @@ SITES_DICT = {
 
     },
 
+'ziprecruiter': {
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
+        'link_selector': 'clk',
+        'title_word_sep': '+',
+        'title_selector': 'job_title',
+        'title_tag': 'h1',
+        'anchor_method': 'all',
+        'prepend_site_id': False,
+
+    },
+
+    'careerbuilder': {
+        'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
+        'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'all',
+        'prepend_site_id': True,
+    },
+
+    'indeed': {
+        'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
+        'link_selector': 'turnstileLink',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
+    },
+
 
 }
 

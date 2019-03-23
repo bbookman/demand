@@ -82,16 +82,17 @@ if __name__ == '__main__':
         finally:
             print('Exiting')
     series = pd.Series(job_skills)
-    df = series.to_frame()
+    series = pd.Series(job_skills)
+    df = series.to_frame('skill_count')
+    df.sort_values('skill_count', ascending=False, inplace=True)
+    df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
+    df2 = df[df.percent >= 3.0]
+    print(df2)
 
-#    print(job_skills)
-#    file_name = f'{original_title}_{zipcode}_results.txt'
-#    with open(file_name, 'w') as file:
-#        file.write(f'[{original_title}: [{zipcode}: {job_skills}  ]]')
 
+    file_name = f'{original_title}_{zipcode}_results.txt'
+    with open(file_name, 'w') as file:
+        file.write(f'[{original_title}: [{zipcode}: {job_skills}  ]]')
 
     end = make_time_string()
-#    print(f'RESULTS: {file_name}')
-
-    print(df)
     print_and_log(f'start: {start}, end: {end}', 'debug')
