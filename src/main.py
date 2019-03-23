@@ -1,4 +1,4 @@
-from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
+from constants import SITES_DICT, SKILL_KEYWORDS, TITLES, SKILL_PHRASES
 from utility import *
 import ssl, pdb
 import pandas as pd
@@ -10,9 +10,16 @@ if __name__ == '__main__':
     start = make_time_string()
     d = make_date_string()
     set_log(f'app_{d}.log', logging.DEBUG)   #todo make level a command line arg or setting in param file
+    zipcode = get_zip_code()
 
+    phrases = [p.lower() for p in SKILL_PHRASES]
     skills = [skill.lower() for skill in SKILL_KEYWORDS]
     job_skills = {}
+
+    for skill in skills:
+        job_skills.setdefault(skill, 0)
+    for phrase in phrases:
+        job_skills.setdefault(phrase, 0)
 
     for site_id in SITES_DICT.keys():
         print_and_log(f'START: {site_id}', 'debug')
@@ -26,7 +33,8 @@ if __name__ == '__main__':
             title = build_job_title(original_title, title_sep)
             template = SITES_DICT[site_id]['url_template']
             prepend = SITES_DICT[site_id]['prepend_site_id']
-            zipcode = get_zip_code()
+
+
             url = build_site_url(template, title, zipcode, radius='90', age='60')
             soup = get_soup(url)
 
@@ -63,15 +71,23 @@ if __name__ == '__main__':
                             data = get_soup(link)
                             text = data.get_text()
                             ctext = clean_text(text)
+                            words = [word.lower() for word in ctext]
                             hits = set()
+
+                            for phrase in phrases:
+                                if phrase.lower() not in hits:
+                                    if phrase.lower() in ctext:
+                                        hits.add(phrase.lower())
+                                        job_skills[phrase.lower()] += 1
+                                        print_and_log(f'Found: {phrase.lower()}')
+
                             for skill in skills:
-                                job_skills.setdefault(skill, 0)
-                                if skill not in hits:
-                                    data = [word.lower() for word in ctext]
-                                    if skill.lower() in data:
+                                for word in words:
+                                    if skill.lower() == word.lower() and skill not in hits:
                                         print_and_log(f'Found: {skill}')
                                         hits.add(skill.lower())
-                                        job_skills[skill.lower()] += 1
+
+
                         else:
                             print_and_log('Duplicate link - skipping', 'debug')
                     else:
