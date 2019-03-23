@@ -1,7 +1,8 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES
 from utility import *
 import ssl, pdb
-
+import pandas as pd
+import matplotlib
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -75,13 +76,23 @@ if __name__ == '__main__':
                             print_and_log('Duplicate link - skipping', 'debug')
                     else:
                         print_and_log(f'{site_id}: invalid url: {ref}', 'debug')
+    if not job_skills:
+        try:
+            raise ValueError('No skills found!!!!!')
+        finally:
+            print('Exiting')
+    series = pd.Series(job_skills)
+    series = pd.Series(job_skills)
+    df = series.to_frame('skill_count')
+    df.sort_values('skill_count', ascending=False, inplace=True)
+    df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
+    df2 = df[df.percent >= 3.0]
+    print(df2)
 
-    print(job_skills)
+
     file_name = f'{original_title}_{zipcode}_results.txt'
     with open(file_name, 'w') as file:
         file.write(f'[{original_title}: [{zipcode}: {job_skills}  ]]')
 
-
     end = make_time_string()
-    print(f'RESULTS: {file_name}')
     print_and_log(f'start: {start}, end: {end}', 'debug')
