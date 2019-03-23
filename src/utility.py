@@ -75,7 +75,7 @@ def add_site_id(site_id, ref):
     return f'http://{site_id}.com{ref}'
 
 
-def _title_meets_threshold(title, title_word_values, threshold=90):
+def title_meets_threshold(title, title_word_values, threshold=90):
     print('Evaluating job title against threshold')
     total = 0
     if not title:

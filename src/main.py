@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
             for title, ref in ref_dict.items():
                 dups = set()
-                if _title_meets_threshold(title, title_word_values):
+                if title_meets_threshold(title, title_word_values):
                     if prepend:
                         link =  add_site_id(site_id, ref) #REQUIRES APPENDING SITE ID
                     else:
