@@ -109,7 +109,12 @@ def get_soup(url):
     return soup
 
 def clean_text(text):
-    return re.split(r'\W+', text)
+    body = re.split(r'\W+', text)
+    chopped = [word.lower() for word in body]
+    result = ''
+    for word in chopped:
+        result += word.lower()+ ' '
+    return result
 
 @timeout_decorator.timeout(10)
 def get_title_by_tag(selector, tag, soup):
