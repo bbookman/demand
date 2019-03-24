@@ -27,16 +27,21 @@ SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'dat
 
 SITES_DICT = {
 
-'dice': {
-    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
-    'link_selector': 'dice-btn-link',
-    'title_word_sep': '+',
-    'title_selector': '',
-    'title_tag': '',
-    'anchor_method': 'selector',
-    'prepend_site_id': True,
+    'simplyhired': {
+
+        'url_template': 'https://www.simplyhired.com/search?q={title}&l={zipcode}&mi={radius}&fdb={age}&pn=',
+        'link_selector': 'js-job-link',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'all',
+        'prepend_site_id': True,
+        'paging': True
     },
 
+
+
+#https://www.simplyhired.com/search?q={title}&l={zipcode}&mi={radius}&fdb={age}&pn=
 
 }
 
@@ -48,6 +53,15 @@ TITLES = {
 }
 
 '''
+'dice': {
+    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
+    'link_selector': 'dice-btn-link',
+    'title_word_sep': '+',
+    'title_selector': '',
+    'title_tag': '',
+    'anchor_method': 'selector',
+    'prepend_site_id': True,
+    },
 
     'stackoverflow': {
         'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
@@ -92,9 +106,6 @@ TITLES = {
 
 
 
-
-
-
     'stackoverflow': {
         'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
         'link_selector': 's-link',
@@ -136,8 +147,7 @@ TITLES = {
         'prepend_site_id': True,
     },
 
+<a rel="nofollow" class="card-link js-job-link" itemprop="url" href="/job/ULnmFVNL83kMiTTMXHOpoyNnB7KrsV63FO3l5yCJ-tZfo7CY5NW5lw?tk=1d6mm282k1sbs000&amp;tkt=serp&amp;isp=0&amp;q=data+scientist" data-mdref="/job/ULnmFVNL83kMiTTMXHOpoyNnB7KrsV63FO3l5yCJ-tZfo7CY5NW5lw?tk=1d6mm282k1sbs000&amp;tkt=serp&amp;isp=0&amp;q=data+scientist" target="_blank">Data Scientist</a>
 
-<a id="position0" style="font-size:18px;" title="Data Scientist - Computer Science (Experienced)" class="dice-btn-link loggedInVisited" href="/jobs/detail/Data-Scientist-%26%2345-Computer-Science-%28Experienced%29-Sandia-National-Laboratories-Livermore-CA-94550/RTL54619/665417" onclick="cookieJobID('742d1fdcc20449436929cad1beee2ef1');handleBackButton(this);" value="742d1fdcc20449436929cad1beee2ef1">
-																	<span>Data Scientist - Computer Science...</span>
-																</a>
+												
 '''

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import requests, logging
 import timeout_decorator, pandas as pd
-
+import socket, urllib3
 
 MATCH_ALL = r'.*'
 
@@ -93,7 +93,14 @@ def title_meets_threshold(title, title_word_values, threshold=90):
 
 @timeout_decorator.timeout(10)
 def get_soup(url, skill_dict):
-    if url != 'http://dice.com/jobs/browsejobs':
+    soup = None
+    if url == 'http://dice.com/jobs/browsejobs':
+
+        print_and_log(make_data_frame(skill_dict))
+        sys.exit()
+    elif url in 'http://simplyhired.comhttps://www.simplyhired':
+        return soup
+    else:
         print_and_log(f'Getting raw html from: {url}' )
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
         session = requests.Session()
@@ -103,13 +110,24 @@ def get_soup(url, skill_dict):
             body = response.text
             soup = beautiful(body, 'html.parser')
             print_and_log('Got raw html')
+        except urllib3.exceptions.NewConnectionError as e:
+            print_and_log(e, 'error')
+            write_file(skill_dict, title='new_connection_error_encountered_captured_results')
+        except socket.gaierror as s:
+            print_and_log(s, 'error')
+            write_file(skill_dict, title='socket_error_encountered_captured_results')
+        except socket.error as e:
+            print_and_log(e, 'error')
+            write_file(skill_dict, title='socket_error_encountered_captured_results')
         except Exception as e:
             print_and_log(e, 'error')
-            print_and_log(make_data_frame(skill_dict))
+            write_file(skill_dict, title='exception_encountered_captured_results')
+        except BaseException as b:
+            print_and_log(b, 'error')
+            write_file(skill_dict, title='exception_encountered_captured_results')
+
         return soup
-    else:
-        print_and_log(make_data_frame(skill_dict))
-        sys.exit()
+
 
 def clean_text(text):
     body = re.split(r'\W+', text)
@@ -175,3 +193,9 @@ def make_data_frame(skill_dict):
     df.sort_values('skill_count', ascending=False, inplace=True)
     df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
     return df
+
+def write_file(skill_dict, zipcode = '99999', title = 'RESULTS', ):
+    t = make_time_string()
+    file_name = f'{title}_{zipcode}_{t}results.txt'
+    with open(file_name, 'w') as file:
+        file.write(f'[{title}: [{zipcode}: {skill_dict}  ]]')
