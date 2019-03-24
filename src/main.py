@@ -14,7 +14,7 @@ if __name__ == '__main__':
     phrases = [p.lower() for p in SKILL_PHRASES]
     skills = [skill.lower() for skill in SKILL_KEYWORDS]
     job_skills = {}
-
+    original_title = str()
     for skill in skills:
         job_skills.setdefault(skill, 0)
     for phrase in phrases:
@@ -32,29 +32,43 @@ if __name__ == '__main__':
             title = build_job_title(original_title, title_sep)
             template = SITES_DICT[site_id]['url_template']
             prepend = SITES_DICT[site_id]['prepend_site_id']
+            paging = SITES_DICT[site_id]['paging']
+            urls = list()
+            soups = list()
+            hrefs = list()
+            titles = list()
+            if paging:
+                for page in range(5):
+                    url = (build_site_url(template, title, zipcode, radius='90', age='60'))
+                    url = url + str(page)
+                    urls.append(url)
+            else:
+                urls.append(build_site_url(template, title, zipcode, radius='90', age='60'))
 
+            for url in urls:
+                soups.append(get_soup(url, job_skills))
 
-            url = build_site_url(template, title, zipcode, radius='90', age='60')
-            soup = get_soup(url, job_skills)
+            for soup in soups:
+                if anchor_method == 'selector' and soup:
+                    anchors = get_anchors_by_selector(link_selector, soup)
+                    titles = [anchor.get('title') for anchor in anchors]
+                    hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
 
-            if anchor_method == 'selector':
-                anchors = get_anchors_by_selector(link_selector, soup)
-                titles = [anchor.get('title') for anchor in anchors]
-                hrefs = [ref.get('href') for ref in anchors if ref.get('href') is not None]
-        
-            elif anchor_method == 'all':
-                anchors = get_all_anchors(soup)
-                if tag:
-                    titles = list()
-                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
-                    for ref in hrefs:
-                        if prepend:
-                            ref = add_site_id(site_id, ref)
-                        data = get_soup(ref, job_skills)
-                        titles.append(get_title_by_tag(title_selector, tag, data))
-                else:
-                    titles = [anchor.text for anchor in anchors]
-                    hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
+                elif anchor_method == 'all' and soup:
+                    anchors = get_all_anchors(soup)
+                    if tag:
+                        titles = list()
+                        hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None and link_selector in anchor.get('href')]
+                        for ref in hrefs:
+                            if prepend:
+                                ref = add_site_id(site_id, ref)
+                            data = get_soup(ref, job_skills)
+                            if not data:
+                                print_and_log(f'Could not get soup from: {ref}')
+                            titles.append(get_title_by_tag(title_selector, tag, data))
+                    else:
+                        titles = [anchor.text for anchor in anchors]
+                        hrefs = [anchor.get('href') for anchor in anchors if anchor.get('href') is not None]
 
             ref_dict = dict(list(zip(titles, hrefs)))
 
@@ -62,32 +76,33 @@ if __name__ == '__main__':
                 dups = set()
                 if title_meets_threshold(title, title_word_values):
                     if prepend:
-                        link =  add_site_id(site_id, ref) #REQUIRES APPENDING SITE ID
+                        link = add_site_id(site_id, ref)
                     else:
                         link = ref
                     if link:
                         if link not in dups:
                             dups.add(link)
                             data = get_soup(link, job_skills)
+                            if data:
+                                text = data.get_text()
+                                ctext = clean_text(text)
+                                words = [word.lower() for word in ctext]
+                                hits = set()
+                                founds = set()
+                                for phrase in phrases:
+                                    if phrase.lower() not in hits:
+                                        if phrase.lower() in ctext:
+                                            hits.add(phrase.lower())
+                                            job_skills[phrase.lower()] += 1
+                                            print_and_log(f'Found: {phrase.lower()}')
 
-                            text = data.get_text()
-                            ctext = clean_text(text)
-                            words = [word.lower() for word in ctext]
-                            hits = set()
-
-                            for phrase in phrases:
-                                if phrase.lower() not in hits:
-                                    if phrase.lower() in ctext:
-                                        hits.add(phrase.lower())
-                                        job_skills[phrase.lower()] += 1
-                                        print_and_log(f'Found: {phrase.lower()}')
-
-                            for skill in skills:
-                                for word in words:
-                                    if skill.lower() == word.lower() and skill not in hits:
-                                        print_and_log(f'Found: {skill}')
-                                        hits.add(skill.lower())
-
+                                for skill in skills:
+                                    for word in words:
+                                        if skill.lower() == word.lower() and skill not in founds:
+                                            founds.add(skill.lower())
+                                            job_skills[skill.lower()] += 1
+                            else:
+                                print_and_log(f'Could not get soup from: {link}')
 
                         else:
                             print_and_log('Duplicate link - skipping', 'debug')
@@ -104,12 +119,10 @@ if __name__ == '__main__':
     #  find mean average
 
     df2 = df[df.percent >= 3.0]
+    df2.round('percent':2)
     print(df2)
 
-
-    file_name = f'{original_title}_{zipcode}_results.txt'
-    with open(file_name, 'w') as file:
-        file.write(f'[{original_title}: [{zipcode}: {job_skills}  ]]')
+    write_file(job_skills, title=original_title, zipcode=zipcode)
 
     end = make_time_string()
     print_and_log(f'start: {start}, end: {end}', 'debug')
