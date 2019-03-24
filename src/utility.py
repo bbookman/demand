@@ -2,7 +2,7 @@ import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import requests, logging
-import timeout_decorator
+import timeout_decorator, pandas as pd
 
 
 MATCH_ALL = r'.*'
@@ -92,21 +92,24 @@ def title_meets_threshold(title, title_word_values, threshold=90):
     return False
 
 @timeout_decorator.timeout(10)
-def get_soup(url):
-    print_and_log(f'Getting raw html from: {url}' )
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
-    session = requests.Session()
-    session.headers.update({'User-Agent': user_agent})
-    try:
-        response = session.get(url)
-        body = response.text
-        soup = beautiful(body, 'html.parser')
-        print_and_log('Got raw html')
-    except Exception as e:
-        print(e)
-        report(f'SOUP: {soup.prettify()}')
-        report(e)
-    return soup
+def get_soup(url, skill_dict):
+    if url != 'http://dice.com/jobs/browsejobs':
+        print_and_log(f'Getting raw html from: {url}' )
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
+        session = requests.Session()
+        session.headers.update({'User-Agent': user_agent})
+        try:
+            response = session.get(url)
+            body = response.text
+            soup = beautiful(body, 'html.parser')
+            print_and_log('Got raw html')
+        except Exception as e:
+            print_and_log(e, 'error')
+            print_and_log(make_data_frame(skill_dict))
+        return soup
+    else:
+        print_and_log(make_data_frame(skill_dict))
+        sys.exit()
 
 def clean_text(text):
     body = re.split(r'\W+', text)
@@ -125,6 +128,8 @@ def get_title_by_tag(selector, tag, soup):
         text = data[0].text
         text = text.strip('\n')
         text = text.strip()
+        text = text.rstrip()
+        text = text.lstrip()
     print_and_log(f'Got title: {text}')
     return text
 
@@ -164,4 +169,9 @@ def print_and_log(text, level = 'info'):
         logging.warning(text)
 
 
-
+def make_data_frame(skill_dict):
+    series = pd.Series(skill_dict)
+    df = series.to_frame('skill_count')
+    df.sort_values('skill_count', ascending=False, inplace=True)
+    df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
+    return df

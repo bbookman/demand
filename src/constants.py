@@ -27,18 +27,15 @@ SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'dat
 
 SITES_DICT = {
 
-    'stackoverflow': {
-        'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
-        'link_selector': 's-link',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'selector',
-        'prepend_site_id': True,
-
+'dice': {
+    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
+    'link_selector': 'dice-btn-link',
+    'title_word_sep': '+',
+    'title_selector': '',
+    'title_tag': '',
+    'anchor_method': 'selector',
+    'prepend_site_id': True,
     },
-
-
 
 
 }
@@ -51,6 +48,17 @@ TITLES = {
 }
 
 '''
+
+    'stackoverflow': {
+        'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
+        'link_selector': 's-link',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
+
+    },
 'ziprecruiter': {
         'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
         'link_selector': 'clk',
@@ -81,17 +89,8 @@ TITLES = {
         'anchor_method': 'selector',
         'prepend_site_id': True,
     },  
-'dice': {
-    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
-    'link_selector': 'jobs',
-    'title_word_sep': '+',
-    'title_selector': 'jobTitle',
-    'title_tag': 'h1',
-    'anchor_method': 'all',
-    'prepend_site_id': True,
 
 
-},
 
 
 
@@ -137,4 +136,8 @@ TITLES = {
         'prepend_site_id': True,
     },
 
+
+<a id="position0" style="font-size:18px;" title="Data Scientist - Computer Science (Experienced)" class="dice-btn-link loggedInVisited" href="/jobs/detail/Data-Scientist-%26%2345-Computer-Science-%28Experienced%29-Sandia-National-Laboratories-Livermore-CA-94550/RTL54619/665417" onclick="cookieJobID('742d1fdcc20449436929cad1beee2ef1');handleBackButton(this);" value="742d1fdcc20449436929cad1beee2ef1">
+																	<span>Data Scientist - Computer Science...</span>
+																</a>
 '''
