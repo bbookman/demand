@@ -43,7 +43,7 @@ if __name__ == '__main__':
                     url = url + str(page)
                     urls.append(url)
             else:
-                urls = build_site_url(template, title, zipcode, radius='90', age='60')
+                urls.append(build_site_url(template, title, zipcode, radius='90', age='60'))
 
             for url in urls:
                 soups.append(get_soup(url, job_skills))
@@ -88,7 +88,7 @@ if __name__ == '__main__':
                                 ctext = clean_text(text)
                                 words = [word.lower() for word in ctext]
                                 hits = set()
-
+                                founds = set()
                                 for phrase in phrases:
                                     if phrase.lower() not in hits:
                                         if phrase.lower() in ctext:
@@ -98,9 +98,10 @@ if __name__ == '__main__':
 
                                 for skill in skills:
                                     for word in words:
-                                        if skill.lower() == word.lower() and skill not in hits:
+                                        if skill.lower() == word.lower() and skill not in founds:
                                             print_and_log(f'Found: {skill}')
-                                            hits.add(skill.lower())
+                                            founds.add(skill.lower())
+                                            job_skills[skill.lower()] += 1
                             else:
                                 print_and_log(f'Could not get soup from: {link}')
 

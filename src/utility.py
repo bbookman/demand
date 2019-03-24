@@ -192,10 +192,11 @@ def make_data_frame(skill_dict):
     df = series.to_frame('skill_count')
     df.sort_values('skill_count', ascending=False, inplace=True)
     df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
+    df.round(2)
     return df
 
 def write_file(skill_dict, zipcode = '99999', title = 'RESULTS', ):
-    t = make_time_string()
-    file_name = f'{title}_{zipcode}_{t}results.txt'
+    d = make_date_string()
+    file_name = f'{title}_{zipcode}_{d}results.txt'
     with open(file_name, 'w') as file:
         file.write(f'[{title}: [{zipcode}: {skill_dict}  ]]')

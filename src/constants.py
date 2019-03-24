@@ -27,6 +27,62 @@ SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'dat
 
 SITES_DICT = {
 
+    'dice': {
+        'url_template': 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
+        'link_selector': 'dice-btn-link',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
+        'paging': False,
+    },
+
+    'stackoverflow': {
+        'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
+        'link_selector': 's-link',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
+        'paging': False,
+
+    },
+    'ziprecruiter': {
+        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
+        'link_selector': 'clk',
+        'title_word_sep': '+',
+        'title_selector': 'job_title',
+        'title_tag': 'h1',
+        'anchor_method': 'all',
+        'prepend_site_id': False,
+        'paging': False,
+
+    },
+
+    'careerbuilder': {
+        'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
+        'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'all',
+        'prepend_site_id': True,
+        'paging': False,
+    },
+
+    'indeed': {
+        'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
+        'link_selector': 'turnstileLink',
+        'title_word_sep': '+',
+        'title_selector': '',
+        'title_tag': '',
+        'anchor_method': 'selector',
+        'prepend_site_id': True,
+        'paging': False
+    },
+
     'simplyhired': {
 
         'url_template': 'https://www.simplyhired.com/search?q={title}&l={zipcode}&mi={radius}&fdb={age}&pn=',
@@ -39,10 +95,6 @@ SITES_DICT = {
         'paging': True
     },
 
-
-
-#https://www.simplyhired.com/search?q={title}&l={zipcode}&mi={radius}&fdb={age}&pn=
-
 }
 
 
@@ -51,103 +103,3 @@ TITLES = {
      #SKILL_KEYWORDS, True],
     'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
 }
-
-'''
-'dice': {
-    'url_template' : 'https://www.dice.com/jobs/advancedResult.html?for_one={title}&for_loc={zipcode}&sort=relevance&limit=50&radius={radius}&postedDate={age}',
-    'link_selector': 'dice-btn-link',
-    'title_word_sep': '+',
-    'title_selector': '',
-    'title_tag': '',
-    'anchor_method': 'selector',
-    'prepend_site_id': True,
-    },
-
-    'stackoverflow': {
-        'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
-        'link_selector': 's-link',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'selector',
-        'prepend_site_id': True,
-
-    },
-'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
-        'link_selector': 'clk',
-        'title_word_sep': '+',
-        'title_selector': 'job_title',
-        'title_tag': 'h1',
-        'anchor_method': 'all',
-        'prepend_site_id': False,
-
-    },
-
-    'careerbuilder': {
-        'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
-        'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'all',
-        'prepend_site_id': True,
-    },
-
-    'indeed': {
-        'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
-        'link_selector': 'turnstileLink',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'selector',
-        'prepend_site_id': True,
-    },  
-
-
-
-    'stackoverflow': {
-        'url_template': 'https://stackoverflow.com/jobs?q={title}&l={zipcode}&d={radius}&u=Miles&',
-        'link_selector': 's-link',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'selector',
-        'prepend_site_id': True,
-
-    },
-    'ziprecruiter': {
-        'url_template': 'http://www.ziprecruiter.com/candidate/search?search={title}&location={zipcode}&days={age}&radius={radius}',
-        'link_selector': 'clk',
-        'title_word_sep': '+',
-        'title_selector': 'job_title',
-        'title_tag': 'h1',
-        'anchor_method': 'all',
-        'prepend_site_id': False,
-
-    },
-
-    'careerbuilder': {
-        'url_template': 'https://www.careerbuilder.com/jobs?location={zipcode}&radius={radius}&posted={age}',
-        'link_selector': 'data-gtm="jrp-job-list|job-title-click|1"',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'all',
-        'prepend_site_id': True,
-    },
-
-    'indeed': {
-        'url_template': 'https://www.indeed.com/jobs?as_and={title}&radius={radius}&l={zipcode}&fromage={age}&limit=500&sort=&psf=advsrch',
-        'link_selector': 'turnstileLink',
-        'title_word_sep': '+',
-        'title_selector': '',
-        'title_tag': '',
-        'anchor_method': 'selector',
-        'prepend_site_id': True,
-    },
-
-<a rel="nofollow" class="card-link js-job-link" itemprop="url" href="/job/ULnmFVNL83kMiTTMXHOpoyNnB7KrsV63FO3l5yCJ-tZfo7CY5NW5lw?tk=1d6mm282k1sbs000&amp;tkt=serp&amp;isp=0&amp;q=data+scientist" data-mdref="/job/ULnmFVNL83kMiTTMXHOpoyNnB7KrsV63FO3l5yCJ-tZfo7CY5NW5lw?tk=1d6mm282k1sbs000&amp;tkt=serp&amp;isp=0&amp;q=data+scientist" target="_blank">Data Scientist</a>
-
-												
-'''
