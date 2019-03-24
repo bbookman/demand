@@ -99,7 +99,6 @@ if __name__ == '__main__':
                                 for skill in skills:
                                     for word in words:
                                         if skill.lower() == word.lower() and skill not in founds:
-                                            print_and_log(f'Found: {skill}')
                                             founds.add(skill.lower())
                                             job_skills[skill.lower()] += 1
                             else:
@@ -120,6 +119,7 @@ if __name__ == '__main__':
     #  find mean average
 
     df2 = df[df.percent >= 3.0]
+    df2.round('percent':2)
     print(df2)
 
     write_file(job_skills, title=original_title, zipcode=zipcode)

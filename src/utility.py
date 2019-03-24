@@ -5,7 +5,6 @@ import requests, logging
 import timeout_decorator, pandas as pd
 import socket, urllib3
 
-MATCH_ALL = r'.*'
 
 def read_input_file():
     #todo - what if argument is not there or invalid?
@@ -131,11 +130,7 @@ def get_soup(url, skill_dict):
 
 def clean_text(text):
     body = re.split(r'\W+', text)
-    chopped = [word.lower() for word in body]
-    result = ''
-    for word in chopped:
-        result += word.lower()+ ' '
-    return result
+    return [word.lower() for word in body]
 
 @timeout_decorator.timeout(10)
 def get_title_by_tag(selector, tag, soup):

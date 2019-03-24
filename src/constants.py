@@ -1,5 +1,5 @@
 SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
-'perl', 'matlab', 'javascript', 'scala', 'firmware', 'Espresso',  'matplotlib', 'Matlab', 'ec2', 'statistical', 'visualizations', 'visualization',
+'perl', 'matlab', 'javascript', 'scala', 'firmware', 'jupyter','Espresso',  'matplotlib', 'Matlab', 'ec2', 'statistical', 'visualizations', 'visualization',
                  'php', 'flask', 'shell', 'solaris', 'Telecom', 'NAS', 'iSCSI', 'scripts', 'scripting','etl', 'collibra', 'onedata',
                  'junit', 'selenium', 'react', 'c#', 'TestRail', 'Confluence', 'JMeter', 'Vertica', 'Logstash', 'Kibana',
                 'tableau', 'd3.js', 'sas', 'spss', 'd3', 'saas', 'pandas', 'numpy', 'Jenkins', 'scipy', 'plan', 'case',
@@ -23,7 +23,7 @@ SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'dat
                  'test case', 'black box', 'white box', 'gray box', 'data mining', 'business intellegence',
                  'relational databases', 'statistical modeling', 'embedded systems', 'A/B testing',
                  'Computational Biology', 'Life Science', 'version control', 'Power BI', 'probability theory',
-                 'Elastic Search', 'Neural Networks', 'sensor fusion']
+                 'Elastic Search', 'Neural Networks', 'sensor fusion', 'jupyter notebook']
 
 SITES_DICT = {
 
@@ -103,3 +103,4 @@ TITLES = {
      #SKILL_KEYWORDS, True],
     'data science engineer': [{'data':60, 'science':30, 'engineer':30, 'engineering': 30, 'scientist': 30, 'quantitative': 50, 'analyst':40}, SKILL_KEYWORDS, False],
 }
+
