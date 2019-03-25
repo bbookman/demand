@@ -1,7 +1,7 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES, SKILL_PHRASES
 from utility import *
 import ssl, pdb
-import matplotlib
+#import matplotlib
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     #  find mean average
 
     df2 = df[df.percent >= 3.0]
-    df2.round('percent':2)
+    df2.round({'percent':2})
     print(df2)
 
     write_file(job_skills, title=original_title, zipcode=zipcode)
