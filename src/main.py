@@ -109,18 +109,18 @@ if __name__ == '__main__':
                             print_and_log('Duplicate link - skipping', 'debug')
                     else:
                         print_and_log(f'{site_id}: invalid url: {ref}', 'debug')
-    if not job_skills:
-        try:
-            raise ValueError('No skills found!!!!!')
-        finally:
-            print('Exiting')
-    df = make_data_frame(job_skills)
-    df.round({'percent':2})
-    print(df)
-    with open('dataFrame.txt', 'w') as file:
-        file.write(df.to_string())
+        if not job_skills:
+            try:
+                raise ValueError('No skills found!!!!!')
+            finally:
+                print('Exiting')
+        df = make_data_frame(job_skills)
+        df.round({'percent':2})
+        print(df)
+        with open(f'dataFrame_{original_title}.txt', 'w') as file:
+            file.write(df.to_string())
 
-    write_file(job_skills, title=original_title, zipcode=zipcode)
+        write_file(job_skills, title=original_title, zipcode=zipcode)
 
     end = make_time_string()
     print_and_log(f'start: {start}, end: {end}', 'debug')

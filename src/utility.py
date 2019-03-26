@@ -192,6 +192,6 @@ def make_data_frame(skill_dict):
 
 def write_file(skill_dict, zipcode = '99999', title = 'RESULTS', ):
     d = make_date_string()
-    file_name = f'{title}_{zipcode}_{d}results.txt'
+    file_name = f'{title}_{zipcode}_{d}_results.txt'
     with open(file_name, 'w') as file:
         file.write(f'[{title}: [{zipcode}: {skill_dict}  ]]')

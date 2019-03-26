@@ -15,7 +15,7 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
             'github', 'database', 'acceptance', 'uat', 'healthcare', 'banking', 'Excel', 'r', 'Statistics', 'Mathematics','SparkSQL',
             'druid', 'solr','economics', 'clickstream', 'haskell', 'nomad', 'nix', 'bazil', 'buck', 'key-value','NLP', 'Bayesian', 'Gurobi',
             'windows', 'C/C++', 'NVMe', 'SSD', 'HDD','Typescript','DNN','cnn', 'rnn', 'phd', 'sem', 'audio', 'video',
-                 'SPSS', 'masters','automotive', 'robotic', 'Biotech', 'Genetics', 'Genomics', 'oop', 'Pyspark',
+                 'SPSS','automotive', 'robotic', 'Biotech', 'Genetics', 'Genomics', 'oop', 'Pyspark',
                  'Sqoop', 'Redshift', 'Kinesis', 'Glue', 'presto', 'Caffe', 'Caffe2', 'Tensorflow', 'MXNe',
                  'OpenCV', 'BigTable', 'bigdata', 'ml', 'hardware']
 
