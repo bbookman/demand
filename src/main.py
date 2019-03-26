@@ -1,6 +1,7 @@
 from constants import SITES_DICT, SKILL_KEYWORDS, TITLES, SKILL_PHRASES
 from utility import *
 import ssl, pdb
+import pandas
 #import matplotlib
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -20,9 +21,11 @@ if __name__ == '__main__':
     for phrase in phrases:
         job_skills.setdefault(phrase, 0)
 
-    for site_id in SITES_DICT.keys():
-        print_and_log(f'START: {site_id}', 'debug')
-        for original_title in TITLES.keys():
+    #for site_id in SITES_DICT.keys():
+
+    for original_title in TITLES.keys():
+        for site_id in SITES_DICT.keys():
+            print_and_log(f'START: {original_title}', 'debug')
             anchor_method = SITES_DICT[site_id]['anchor_method']
             title_selector = SITES_DICT[site_id]['title_selector']
             tag = SITES_DICT[site_id]['title_tag']
@@ -114,11 +117,12 @@ if __name__ == '__main__':
                 raise ValueError('No skills found!!!!!')
             finally:
                 print('Exiting')
+        df = pandas.DataFrame()
         df = make_data_frame(job_skills)
         df.round({'percent':2})
-        print(df)
-        with open(f'dataFrame_{original_title}.txt', 'w') as file:
-            file.write(df.to_string())
+        #print(df)
+        with open(f'dataFrame_{original_title}_{d}.txt', 'w') as file:
+                file.write(df.to_string())
 
         write_file(job_skills, title=original_title, zipcode=zipcode)
 
