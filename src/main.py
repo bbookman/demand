@@ -117,8 +117,8 @@ if __name__ == '__main__':
     df = make_data_frame(job_skills)
     df.round({'percent':2})
     print(df)
-    with open('dataFrame.txt' 'w') as file:
-        file.write(df)
+    with open('dataFrame.txt', 'w') as file:
+        file.write(df.to_string())
 
     write_file(job_skills, title=original_title, zipcode=zipcode)
 
