@@ -2,10 +2,9 @@ import sys, re, pdb
 from bs4 import BeautifulSoup as beautiful
 from datetime import datetime
 import requests, logging
-import timeout_decorator
+import timeout_decorator, pandas as pd
+import socket, urllib3
 
-
-MATCH_ALL = r'.*'
 
 def read_input_file():
     #todo - what if argument is not there or invalid?
@@ -92,29 +91,46 @@ def title_meets_threshold(title, title_word_values, threshold=90):
     return False
 
 @timeout_decorator.timeout(10)
-def get_soup(url):
-    print_and_log(f'Getting raw html from: {url}' )
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
-    session = requests.Session()
-    session.headers.update({'User-Agent': user_agent})
-    try:
-        response = session.get(url)
-        body = response.text
-        soup = beautiful(body, 'html.parser')
-        print_and_log('Got raw html')
-    except Exception as e:
-        print(e)
-        report(f'SOUP: {soup.prettify()}')
-        report(e)
-    return soup
+def get_soup(url, skill_dict):
+    soup = None
+    if url == 'http://dice.com/jobs/browsejobs':
+
+        print_and_log(make_data_frame(skill_dict))
+        sys.exit()
+    elif url in 'http://simplyhired.comhttps://www.simplyhired':
+        return soup
+    else:
+        print_and_log(f'Getting raw html from: {url}' )
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0'
+        session = requests.Session()
+        session.headers.update({'User-Agent': user_agent})
+        try:
+            response = session.get(url)
+            body = response.text
+            soup = beautiful(body, 'html.parser')
+            print_and_log('Got raw html')
+        except urllib3.exceptions.NewConnectionError as e:
+            print_and_log(e, 'error')
+            write_file(skill_dict, title='new_connection_error_encountered_captured_results')
+        except socket.gaierror as s:
+            print_and_log(s, 'error')
+            write_file(skill_dict, title='socket_error_encountered_captured_results')
+        except socket.error as e:
+            print_and_log(e, 'error')
+            write_file(skill_dict, title='socket_error_encountered_captured_results')
+        except Exception as e:
+            print_and_log(e, 'error')
+            write_file(skill_dict, title='exception_encountered_captured_results')
+        except BaseException as b:
+            print_and_log(b, 'error')
+            write_file(skill_dict, title='exception_encountered_captured_results')
+
+        return soup
+
 
 def clean_text(text):
     body = re.split(r'\W+', text)
-    chopped = [word.lower() for word in body]
-    result = ''
-    for word in chopped:
-        result += word.lower()+ ' '
-    return result
+    return [word.lower() for word in body]
 
 @timeout_decorator.timeout(10)
 def get_title_by_tag(selector, tag, soup):
@@ -125,6 +141,8 @@ def get_title_by_tag(selector, tag, soup):
         text = data[0].text
         text = text.strip('\n')
         text = text.strip()
+        text = text.rstrip()
+        text = text.lstrip()
     print_and_log(f'Got title: {text}')
     return text
 
@@ -164,4 +182,16 @@ def print_and_log(text, level = 'info'):
         logging.warning(text)
 
 
+def make_data_frame(skill_dict):
+    series = pd.Series(skill_dict)
+    df = series.to_frame('skill_count')
+    df.sort_values('skill_count', ascending=False, inplace=True)
+    df['percent'] = df['skill_count'] / df['skill_count'].sum() * 100
+    df.round(2)
+    return df
 
+def write_file(skill_dict, zipcode = '99999', title = 'RESULTS', ):
+    d = make_date_string()
+    file_name = f'{title}_{zipcode}_{d}results.txt'
+    with open(file_name, 'w') as file:
+        file.write(f'[{title}: [{zipcode}: {skill_dict}  ]]')
