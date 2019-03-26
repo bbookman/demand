@@ -101,6 +101,7 @@ if __name__ == '__main__':
                                         if skill.lower() == word.lower() and skill not in founds:
                                             founds.add(skill.lower())
                                             job_skills[skill.lower()] += 1
+
                             else:
                                 print_and_log(f'Could not get soup from: {link}')
 
@@ -114,13 +115,10 @@ if __name__ == '__main__':
         finally:
             print('Exiting')
     df = make_data_frame(job_skills)
-
-
-    #  find mean average
-
-    df2 = df[df.percent >= 3.0]
-    df2.round({'percent':2})
-    print(df2)
+    df.round({'percent':2})
+    print(df)
+    with open('dataFrame.txt' 'w') as file:
+        file.write(df)
 
     write_file(job_skills, title=original_title, zipcode=zipcode)
 

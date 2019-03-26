@@ -8,7 +8,7 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
                 'elasticsearch', 'api', 'apis', 'Mockito', 'Robotium', 'frontend', 'backend', 'Informatica', 'Julia',
               'sql', 'nosql', 'hbase', 'cassandra', 'xml', 'rust', 'mongodb', 'mysql', 'mssql', 'postgre', 'oracle',
              'rdbms', 'mobile', 'android', 'ios', 'cucumber', 'iot', 'telecommunications', 'Superset', 'ggplot',
-             'hive', 'cucumber', 'aws', 'azure', 'amazon', 'google', 'rest', 'docker', 'container', 'puppet', 'chef',
+             'hive', 'cucumber', 'aws', 'azure', 'amazon', 'rest', 'docker', 'container', 'puppet', 'chef',
              'kubernetes', 'storage', 'network', 'networking', 'maven', 'ci', 'cd', 'ci/cd', 'gui', 'marketing', 'MDM', 'PL/SQL',
             'restassured', 'ios', 'json', 'swift', 'objective-c', 'groovy', '.net', 'angular', 'node.js', 'kafka', 'mesos','go',
             'django', 'pytest', 'css', 'html', 'appium', 'linux', 'css', 'ui', 'soa', 'unix', 'RESTful', 'Elastic', 'git',
@@ -17,13 +17,13 @@ SKILL_KEYWORDS =['python', 'c++', 'java', 'bash','ruby',
             'windows', 'C/C++', 'NVMe', 'SSD', 'HDD','Typescript','DNN','cnn', 'rnn', 'phd', 'sem', 'audio', 'video',
                  'SPSS', 'masters','automotive', 'robotic', 'Biotech', 'Genetics', 'Genomics', 'oop', 'Pyspark',
                  'Sqoop', 'Redshift', 'Kinesis', 'Glue', 'presto', 'Caffe', 'Caffe2', 'Tensorflow', 'MXNe',
-                 'OpenCV', 'BigTable']
+                 'OpenCV', 'BigTable', 'bigdata', 'ml']
 
-SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'data warehouse', 'sauce labs', 'test plan',
-                 'test case', 'black box', 'white box', 'gray box', 'data mining', 'business intellegence',
+SKILL_PHRASES = ['machine learning', 'big data', 'artificial intelligence', 'data warehouse', 'data warehousing' 'sauce labs', 'test plan',
+                 'test case', 'black box', 'white box', 'gray box', 'data mining', 'business intelligence',
                  'relational databases', 'statistical modeling', 'embedded systems', 'A/B testing',
                  'Computational Biology', 'Life Science', 'version control', 'Power BI', 'probability theory',
-                 'Elastic Search', 'Neural Networks', 'sensor fusion', 'jupyter notebook']
+                 'Elastic Search', 'Neural Networks', 'sensor fusion', 'jupyter notebook', 'google app engine', 'google cloud', 'amazon web services']
 
 SITES_DICT = {
 
