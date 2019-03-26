@@ -114,16 +114,16 @@ def get_soup(url, skill_dict):
             write_file(skill_dict, title='new_connection_error_encountered_captured_results')
         except socket.gaierror as s:
             print_and_log(s, 'error')
-            write_file(skill_dict, title='socket_error_encountered_captured_results')
+            #write_file(skill_dict, title='socket_error_encountered_captured_results')
         except socket.error as e:
             print_and_log(e, 'error')
-            write_file(skill_dict, title='socket_error_encountered_captured_results')
+            #write_file(skill_dict, title='socket_error_encountered_captured_results')
         except Exception as e:
             print_and_log(e, 'error')
-            write_file(skill_dict, title='exception_encountered_captured_results')
+            #write_file(skill_dict, title='exception_encountered_captured_results')
         except BaseException as b:
             print_and_log(b, 'error')
-            write_file(skill_dict, title='exception_encountered_captured_results')
+            #write_file(skill_dict, title='exception_encountered_captured_results')
 
         return soup
 
